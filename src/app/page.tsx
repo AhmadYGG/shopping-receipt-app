@@ -185,8 +185,9 @@ export default function ShoppingReceipt() {
 
     try {
       const dataUrl = await htmlToImage.toPng(node, {
+        backgroundColor: 'white',     // ← Wajib: background putih
         cacheBust: true,
-        backgroundColor: 'white'
+        pixelRatio: 2                 // ← Export kualitas tinggi
       })
 
       const link = document.createElement('a')
