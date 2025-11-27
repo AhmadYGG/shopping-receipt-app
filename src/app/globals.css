@@ -43,6 +43,29 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@media (prefers-color-scheme: dark) {
+    #receipt {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+}
+
+/* Paksa area export tetap light mode */
+#receipt {
+    background: #ffffff !important;
+    color: #000000 !important;
+
+    /* mencegah inherit dark mode */
+    forced-color-adjust: none;
+    color-scheme: light;
+}
+
+/* kalau ada card, box, table dll */
+#receipt * {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
