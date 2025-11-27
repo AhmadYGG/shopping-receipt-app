@@ -18,6 +18,8 @@ interface ReceiptItem {
 
 export default function ShoppingReceipt() {
   const [storeName, setStoreName] = useState('TOKO KELONTONG')
+  const [storeAddress, setStoreAddress] = useState('')
+  const [storePhone, setStorePhone] = useState('')
   const [cashierName, setCashierName] = useState('Kasir')
   const [items, setItems] = useState<ReceiptItem[]>([
     { id: '1', name: '', quantity: 1, price: 0 }
@@ -119,6 +121,28 @@ export default function ShoppingReceipt() {
                   value={storeName}
                   onChange={(e) => setStoreName(e.target.value)}
                   placeholder="Masukkan nama toko"
+                />
+              </div>
+
+              {/* Store Address */}
+              <div>
+                <Label htmlFor="storeAddress">Alamat Toko (Opsional)</Label>
+                <Input
+                  id="storeAddress"
+                  value={storeAddress}
+                  onChange={(e) => setStoreAddress(e.target.value)}
+                  placeholder="Masukkan alamat toko"
+                />
+              </div>
+
+              {/* Store Phone */}
+              <div>
+                <Label htmlFor="storePhone">No. Telepon Toko (Opsional)</Label>
+                <Input
+                  id="storePhone"
+                  value={storePhone}
+                  onChange={(e) => setStorePhone(e.target.value)}
+                  placeholder="Masukkan nomor telepon toko"
                 />
               </div>
 
@@ -232,8 +256,12 @@ export default function ShoppingReceipt() {
                 {/* Receipt Header */}
                 <div className="text-center mb-6">
                   <h2 className="text-xl font-bold mb-2">{storeName || 'NAMA TOKO'}</h2>
-                  <p className="text-sm text-gray-600">Jl. Contoh No. 123, Jakarta</p>
-                  <p className="text-sm text-gray-600">Tel: 021-12345678</p>
+                  {storeAddress && (
+                    <p className="text-sm text-gray-600 mb-1">{storeAddress}</p>
+                  )}
+                  {storePhone && (
+                    <p className="text-sm text-gray-600">Tel: {storePhone}</p>
+                  )}
                 </div>
 
                 <Separator className="mb-4" />
