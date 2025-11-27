@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Trash2, Plus, Printer } from 'lucide-react'
+import { Trash2, Plus, Printer, Download } from 'lucide-react'
+import * as htmlToImage from 'html-to-image'
 
 interface ReceiptItem {
   id: string
@@ -17,10 +18,10 @@ interface ReceiptItem {
 }
 
 export default function ShoppingReceipt() {
-  const [storeName, setStoreName] = useState('TOKO KELONTONG')
-  const [storeAddress, setStoreAddress] = useState('')
-  const [storePhone, setStorePhone] = useState('')
-  const [cashierName, setCashierName] = useState('Kasir')
+  const [storeName] = useState('Nova VapeStore')
+  const [storeAddress] = useState('Jl. Maluku Depan Yonif 511 Utara Green Futsal')
+  const [storePhone] = useState('081217224413')
+  const [cashierName] = useState('Aziz')
   const [items, setItems] = useState<ReceiptItem[]>([
     { id: '1', name: '', quantity: 1, price: 0 }
   ])
@@ -101,10 +102,30 @@ export default function ShoppingReceipt() {
     window.print()
   }
 
+  const handleSaveAsPNG = async () => {
+    const node = document.getElementById('receipt')
+    if (!node) return alert("Element receipt tidak ditemukan!")
+
+    try {
+      const dataUrl = await htmlToImage.toPng(node, {
+        cacheBust: true,
+        backgroundColor: 'white'
+      })
+
+      const link = document.createElement('a')
+      link.download = `nota-${Date.now()}.png`
+      link.href = dataUrl
+      link.click()
+    } catch (error) {
+      console.error(error)
+      alert("Gagal menyimpan PNG.")
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8">Aplikasi Nota Belanja</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">RECEIPT MAKER</h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Form */}
@@ -113,50 +134,6 @@ export default function ShoppingReceipt() {
               <CardTitle>Buat Nota</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Store Name */}
-              <div>
-                <Label htmlFor="storeName">Nama Toko</Label>
-                <Input
-                  id="storeName"
-                  value={storeName}
-                  onChange={(e) => setStoreName(e.target.value)}
-                  placeholder="Masukkan nama toko"
-                />
-              </div>
-
-              {/* Store Address */}
-              <div>
-                <Label htmlFor="storeAddress">Alamat Toko (Opsional)</Label>
-                <Input
-                  id="storeAddress"
-                  value={storeAddress}
-                  onChange={(e) => setStoreAddress(e.target.value)}
-                  placeholder="Masukkan alamat toko"
-                />
-              </div>
-
-              {/* Store Phone */}
-              <div>
-                <Label htmlFor="storePhone">No. Telepon Toko (Opsional)</Label>
-                <Input
-                  id="storePhone"
-                  value={storePhone}
-                  onChange={(e) => setStorePhone(e.target.value)}
-                  placeholder="Masukkan nomor telepon toko"
-                />
-              </div>
-
-              {/* Cashier Name */}
-              <div>
-                <Label htmlFor="cashierName">Nama Kasir</Label>
-                <Input
-                  id="cashierName"
-                  value={cashierName}
-                  onChange={(e) => setCashierName(e.target.value)}
-                  placeholder="Masukkan nama kasir"
-                />
-              </div>
-
               {/* Items */}
               <div>
                 <div className="flex justify-between items-center mb-4">
@@ -217,6 +194,7 @@ export default function ShoppingReceipt() {
                     <SelectItem value="Tunai">Tunai</SelectItem>
                     <SelectItem value="Transfer Bank">Transfer Bank</SelectItem>
                     <SelectItem value="E-Wallet">E-Wallet</SelectItem>
+                    <SelectItem value="QRIS">QRIS</SelectItem>
                     <SelectItem value="Kartu Debit">Kartu Debit</SelectItem>
                     <SelectItem value="Kartu Kredit">Kartu Kredit</SelectItem>
                   </SelectContent>
@@ -245,10 +223,16 @@ export default function ShoppingReceipt() {
             <CardHeader>
               <div className="flex justify-between items-center">
                 <CardTitle>Preview Nota</CardTitle>
-                <Button onClick={handlePrint} variant="outline">
-                  <Printer className="w-4 h-4 mr-2" />
-                  Cetak
-                </Button>
+                <div className="flex gap-2">
+                  <Button onClick={handleSaveAsPNG} variant="outline">
+                    <Download className="w-4 h-4 mr-2" />
+                    Simpan PNG
+                  </Button>
+                  <Button onClick={handlePrint} variant="outline">
+                    <Printer className="w-4 h-4 mr-2" />
+                    Cetak
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
