@@ -21,7 +21,7 @@ export default function ShoppingReceipt() {
   const [storeName] = useState('Nova VapeStore')
   const [storeAddress] = useState('Jl. Maluku Depan Yonif 511 Utara Green Futsal')
   const [storePhone] = useState('081217224413')
-  const [cashierName] = useState('Aziz')
+  const [cashierName, setCashierName] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -211,6 +211,18 @@ export default function ShoppingReceipt() {
               <CardTitle>Buat Nota</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Cashier Name */}
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                <Label htmlFor="cashierName">Nama Kasir</Label>
+                </div>
+                <Input
+                  id="cashierName"
+                  value={cashierName}
+                  onChange={(e) => setCashierName(e.target.value)}
+                  placeholder="Masukkan nama kasir"
+                />
+              </div>
               {/* Items */}
               <div>
                 <div className="flex justify-between items-center mb-4">
