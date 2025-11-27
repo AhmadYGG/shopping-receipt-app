@@ -102,6 +102,26 @@ export default function ShoppingReceipt() {
     window.print()
   }
 
+  const handleSaveAsPNG = async () => {
+    const node = document.getElementById('receipt')
+    if (!node) return alert("Element receipt tidak ditemukan!")
+
+    try {
+      const dataUrl = await htmlToImage.toPng(node, {
+        cacheBust: true,
+        backgroundColor: 'white'
+      })
+
+      const link = document.createElement('a')
+      link.download = `nota-${Date.now()}.png`
+      link.href = dataUrl
+      link.click()
+    } catch (error) {
+      console.error(error)
+      alert("Gagal menyimpan PNG.")
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-6xl mx-auto">
